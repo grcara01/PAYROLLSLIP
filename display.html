@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payroll Slip</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1560179707-f14e90ef3623?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29tcGFueSUyMGJ1aWxkaW5nfGVufDB8fDB8fHww');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+    .slip {
+      background: rgba(255,255,255,0.85);
+      padding: 30px;
+      border-radius: 12px;
+      width: 600px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+      color: #222; 
+    }
+    .company-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .company-header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #2c3e50;
+      letter-spacing: 2px;
+    }
+    .company-header p {
+      margin: 0;
+      color: #555;
+      font-size: 15px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+    .info {
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ddd;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      font-size: 16px;
+    }
+    .info-col {
+      flex: 1 1 200px;
+    }
+    .pay-details {
+      margin-bottom: 20px;
+      font-size: 16px;
+      display: flex;
+      gap: 30px;
+    }
+    .pay-details div {
+      flex: 1 1 200px;
+      background: #f8f9fa;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+    .pay-details label {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .pay-details span {
+      float: right;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: right;
+    }
+    th {
+      background: #4a90e2;
+      color: #fff;
+      text-align: left;
+    }
+    .total {
+      font-weight: bold;
+      background: #f8f9fa;
+    }
+    .net {
+      background: #2ecc71;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .back-btn {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-btn a {
+      text-decoration: none;
+      padding: 10px 20px;
+      background: #4a90e2;
+      color: white;
+      border-radius: 6px;
+    }
+    .back-btn a:hover {
+      background: #357ab8;
+    }
+  </style>
+</head>
+<body>
+  <div class="slip">
+    <div class="company-header">
+      <h1>TechSia Corporation</h1>
+      <p>123 Main St., Quezon City, Metro Manila<br>
+      Tel: (02) 123-4567 | TIN: 123-456-789</p>
+    </div>
+    <h2>Payroll Slip</h2>
+    <div class="info">
+      <div class="info-col">
+        <p><b>Employee ID:</b> <span id="empId"></span></p>
+        <p><b>Name:</b> <span id="empName"></span></p>
+      </div>
+      <div class="info-col">
+        <p><b>Position:</b> <span id="position"></span></p>
+        <p><b>Pay Period:</b> <span id="payPeriod"></span></p>
+      </div>
+    </div>
+    <div class="pay-details">
+      <div>
+        <label>Daily Rate:</label>
+        <span id="rate"></span>
+      </div>
+      <div>
+        <label>Total Days Worked:</label>
+        <span id="days"></span>
+      </div>
+    </div>
+
+    <table>
+
+      <tr>
+        <th>Description</th>
+        <th>Amount (₱)</th>
+      </tr>
+      <tr>
+        <td><b>Gross Pay</b></td>
+        <td><b id="gross"></b></td>
+      </tr>
+      <tr>
+        <td><b>SSS (5%)</b></td>
+        <td><b id="sss"></b></td>
+      </tr>
+      <tr>
+        <td><b>Pag-ibig (3%)</b></td>
+        <td><b id="pagibig"></b></td>
+      </tr>
+      <tr>
+        <td><b>PhilHealth (2%)</b></td>
+        <td><b id="philhealth"></b></td>
+      </tr>
+      <tr>
+        <td><b>Tax (5%)</b></td>
+        <td><b id="tax"></b></td>
+      </tr>
+      <tr class="total">
+        <td>Total Deductions</td>
+        <td id="totalDeductions"></td>
+      </tr>
+      <tr class="net">
+        <td>Net Pay</td>
+        <td id="net"></td>
+      </tr>
+    </table>
+    <div class="back-btn">
+      <a href="index.html">← Back</a>
+    </div>
+  </div>
+
+  <script>
+
+    //localStorage
+    const empId = localStorage.getItem("empId");
+    const lastName = localStorage.getItem("lastName");
+    const firstName = localStorage.getItem("firstName");
+    const middleInitial = localStorage.getItem("middleInitial");
+    const position = localStorage.getItem("position");
+    const rate = parseFloat(localStorage.getItem("rate"));
+    const days = parseFloat(localStorage.getItem("days"));
+
+    // Computations
+    const gross = rate * days;
+    const sss = gross * 0.05;
+    const pagibig = gross * 0.03;
+    const philhealth = gross * 0.02;
+    const tax = gross * 0.05;
+    const totalDeductions = sss + pagibig + philhealth + tax;
+    const net = gross - totalDeductions;
+
+    // Display data
+    document.getElementById("empId").innerText = empId;
+    document.getElementById("empName").innerText = `${lastName}, ${firstName} ${middleInitial}.`;
+    document.getElementById("position").innerText = position;
+    document.getElementById("rate").innerText = rate.toFixed(2);
+    document.getElementById("days").innerText = days;
+    document.getElementById("gross").innerText = gross.toFixed(2);
+    document.getElementById("sss").innerText = sss.toFixed(2);
+    document.getElementById("pagibig").innerText = pagibig.toFixed(2);
+    document.getElementById("philhealth").innerText = philhealth.toFixed(2);
+    document.getElementById("tax").innerText = tax.toFixed(2);
+    document.getElementById("totalDeductions").innerText = totalDeductions.toFixed(2);
+    document.getElementById("net").innerText = net.toFixed(2);
+
+    // Set pay period 
+    const now = new Date();
+    const month = now.toLocaleString('default', { month: 'long' });
+    const year = now.getFullYear();
+    document.getElementById("payPeriod").innerText = `${month} ${year}`;
+  </script>
+</body>
+</html>
