@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payroll System</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1560179707-f14e90ef3623?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29tcGFueSUyMGJ1aWxkaW5nfGVufDB8fDB8fHww');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: rgba(255,255,255,0.85);
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 25px; 
+      background: #4a90e2;
+      color: white;
+      font-size: 16px;
+      font-weight: bold; 
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #357ab8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Payroll Input</h2>
+    <form id="payrollForm">
+      <label>Employee ID</label>
+      <input type="text" id="empId" required pattern="^(?=.*\d)[\d-]+$" title="Employee ID must contain numbers and hyphens only.">
+      <small id="empIdError" style="color:#d00; display:none;">Employee ID must contain numbers and hyphens only</small>
+
+      <label>Last Name</label>
+      <input type="text" id="lastName" required>
+
+      <label>First Name</label>
+      <input type="text" id="firstName" required>
+
+      <label>M.I. (optional)</label>
+      <input type="text" id="middleInitial" maxlength="1">
+
+      <label>Position</label>
+      <input type="text" id="position" required>
+
+      <label>Daily Rate </label>
+      <input type="number" id="rate" required>
+
+      <label>Days Worked</label>
+      <input type="number" id="days" required>
+
+      <button type="submit"><b>Generate Payroll</b></button>
+    </form>
+
+  </div>
+
+  <script>
+    document.getElementById("payrollForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const empId = document.getElementById("empId").value;
+      const empIdError = document.getElementById("empIdError");
+      // Must contain only numbers and hyphens
+      if (!/^(?=.*\d)[\d-]+$/.test(empId)) {
+        empIdError.style.display = "block";
+        document.getElementById("empId").focus();
+        return;
+      } else {
+        empIdError.style.display = "none";
+      }
+      const lastName = document.getElementById("lastName").value;
+      const firstName = document.getElementById("firstName").value;
+      const middleInitial = document.getElementById("middleInitial").value || ""; // Optional
+      const position = document.getElementById("position").value;
+      const rate = parseFloat(document.getElementById("rate").value);
+      const days = parseFloat(document.getElementById("days").value);
+
+      localStorage.setItem("empId", empId);
+      localStorage.setItem("lastName", lastName);
+      localStorage.setItem("firstName", firstName);
+      localStorage.setItem("middleInitial", middleInitial);
+      localStorage.setItem("position", position);
+      localStorage.setItem("rate", rate);
+      localStorage.setItem("days", days);
+
+      window.location.href = "display.html";
+    });
+  </script>
+  
+</body>
+</html>
